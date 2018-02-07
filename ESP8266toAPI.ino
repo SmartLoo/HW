@@ -42,18 +42,18 @@ void setup()
 
 void loop()
 {                
-  while (!Serial.available());      // Wait for UART rx buffer to get entry
-  int target = GetData();
-  PostSensorLevel(target);
-}
-
-int GetData()
-{
-  if (Serial.available() > 0)
-  {
-    IncomingByte = Serial.read();
-    return IncomingByte;
-  }
+  while (!Serial.available());
+  
+  String data = Serial.readString();
+  
+  int delimId = data.indexOf(':');
+  int delimValue = data.indexOf(':', delimId + 1);
+  
+  String sensorId = data.substring(0, delimId);
+  String sensorValue = data.substring(delimId + 1, delimValue);
+  String batteryLevel = data.substring(delimValue + 1);
+  
+  PostSensorLevel(sensorId, sensorValue, batteryLevel);
 }
 
 void PostSensorLevel(String sensorId, int sVal, int bLevel)
@@ -67,8 +67,8 @@ void PostSensorLevel(String sensorId, int sVal, int bLevel)
   
   // We now create a URL for the request
   String url = "/api/sensor_data/update";
-  String sensorValue = String(sVal, DEC);
-  String batteryLevel = String(bLevel, DEC);
+  //String sensorValue = String(sVal, DEC);
+  //String batteryLevel = String(bLevel, DEC);
   String req = "{\"sensorId\": \"" + sensorId + "\",\"sensorValue\": \"" + sensorValue + "\",\"batteryLevel\": \"" + batteryLevel + "\"}";
  
 
