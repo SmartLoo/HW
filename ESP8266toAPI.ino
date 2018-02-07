@@ -66,7 +66,7 @@ void PostSensorLevel(String sensorId, int sVal, int bLevel)
   }
   
   // We now create a URL for the request
-  String url = "/api/sensor_data/update";
+  String url = "/api/sensor";
   //String sensorValue = String(sVal, DEC);
   //String batteryLevel = String(bLevel, DEC);
   String req = "{\"sensorId\": \"" + sensorId + "\",\"sensorValue\": \"" + sensorValue + "\",\"batteryLevel\": \"" + batteryLevel + "\"}";
