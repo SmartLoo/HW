@@ -66,7 +66,7 @@ void PostSensorLevel(String sensorId, string sensorValue, string batteryLevel)
   //String sensorValue = String(sVal, DEC);
   //String batteryLevel = String(bLevel, DEC);
   
-  String req = "{\"sensorId\": \"" + sensorId + "\",\"sensorValue\": \"" + sensorValue + "\",\"batteryLevel\": \"" + batteryLevel + "\"}";
+  String req = "{\"sensorId\": \"" + sensorId + "\",\"sensorValue\": " + sensorValue + ",\"batteryLevel\": " + batteryLevel + "}";
  
 
   HTTPClient http;
