@@ -52,7 +52,7 @@ void loop()
   PostSensorLevel(sensorId, sensorValue, batteryLevel);
 }
 
-void PostSensorLevel(String sensorId, string sVal, string bLevel)
+void PostSensorLevel(String sensorId, string sensorValue, string batteryLevel)
 {
   WiFiClient client;
   const int httpPort = 80;
