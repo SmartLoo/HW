@@ -2,7 +2,6 @@
 #include <ESP8266HTTPClient.h>  
 #include <SoftwareSerial.h>
 
-//helloooooo
 const char* ssid     = "Sarah's iPhone";
 const char* password = "aaaaaaaa";
 const char* host = "smartloo.azurewebsites.net";
@@ -11,8 +10,6 @@ int IncomingByte = 0;
 int target = 0;
 int data = 0;
 int code = 0;
-
-//SoftwareSerial Serial(12,14);
 
 void setup()
 {
@@ -26,7 +23,6 @@ void setup()
 
   WiFi.begin(ssid, password);
 
-  //if wifi is not connected
   while (WiFi.status() != WL_CONNECTED) 
   {
     delay(500);
@@ -56,7 +52,7 @@ void loop()
   PostSensorLevel(sensorId, sensorValue, batteryLevel);
 }
 
-void PostSensorLevel(String sensorId, int sVal, int bLevel)
+void PostSensorLevel(String sensorId, string sVal, string bLevel)
 {
   WiFiClient client;
   const int httpPort = 80;
@@ -65,10 +61,11 @@ void PostSensorLevel(String sensorId, int sVal, int bLevel)
     Serial.println("connection failed");
   }
   
-  // We now create a URL for the request
   String url = "/api/sensor";
+  
   //String sensorValue = String(sVal, DEC);
   //String batteryLevel = String(bLevel, DEC);
+  
   String req = "{\"sensorId\": \"" + sensorId + "\",\"sensorValue\": \"" + sensorValue + "\",\"batteryLevel\": \"" + batteryLevel + "\"}";
  
 
@@ -79,7 +76,6 @@ void PostSensorLevel(String sensorId, int sVal, int bLevel)
   int httpCode = http.POST(req);
   String payload = http.getString();
 
-  Serial.println(val);
   Serial.println(httpCode);
   Serial.println(payload);
   http.end();
