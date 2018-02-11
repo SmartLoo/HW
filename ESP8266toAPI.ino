@@ -2,8 +2,8 @@
 #include <ESP8266HTTPClient.h>  
 #include <SoftwareSerial.h>
 
-const char* ssid     = "Sarah's iPhone";
-const char* password = "aaaaaaaa";
+const char* ssid     = "iPhone";
+const char* password = "smartwifi";
 const char* host = "smartloo.azurewebsites.net";
 
 int IncomingByte = 0;
@@ -11,9 +11,12 @@ int target = 0;
 int data = 0;
 int code = 0;
 
+SoftwareSerial XBee(4,5);
+
 void setup()
 {
   Serial.begin(9600);
+  XBee.begin(9600);
   delay(100);
 
   Serial.println();
@@ -37,38 +40,43 @@ void setup()
 
 
 void loop()
-{                
-  while (!Serial.available());
-  
-  String data = Serial.readString();
-  
-  int delimId = data.indexOf(':');
-  int delimValue = data.indexOf(':', delimId + 1);
-  
-  String sensorId = data.substring(0, delimId);
-  String sensorValue = data.substring(delimId + 1, delimValue);
-  String batteryLevel = data.substring(delimValue + 1);
-  
-  PostSensorLevel(sensorId, sensorValue, batteryLevel);
+{
+  if (XBee.available() >= 38)
+  {
+      String data = XBee.readString();
+      
+      Serial.println("XBee Raw Data: " + data);
+      int delimId = data.indexOf(':');
+      int delimValue = data.indexOf(':', delimId + 1);
+      
+      String sensorId = data.substring(0, delimId);
+      String sensorValue = data.substring(delimId + 1, delimValue);
+      String batteryLevel = data.substring(delimValue + 1);
+
+      Serial.println(sensorId);
+      Serial.println(sensorValue);
+      Serial.println(batteryLevel);
+
+      if (sensorId.length() == 37){
+          PostSensorLevel(sensorId, sensorValue, batteryLevel);
+      }
+  }
+  delay(1000);
 }
 
-void PostSensorLevel(String sensorId, string sensorValue, string batteryLevel)
+void PostSensorLevel(String sensorId, String sensorValue, String batteryLevel)
 {
   WiFiClient client;
   const int httpPort = 80;
+  
   if (!client.connect(host, httpPort)) 
   {
-    Serial.println("connection failed");
+    Serial.println("Connection failed.");
   }
   
   String url = "/api/sensor";
-  
-  //String sensorValue = String(sVal, DEC);
-  //String batteryLevel = String(bLevel, DEC);
-  
   String req = "{\"sensorId\": \"" + sensorId + "\",\"sensorValue\": " + sensorValue + ",\"batteryLevel\": " + batteryLevel + "}";
  
-
   HTTPClient http;
   http.begin("http://smartloo.azurewebsites.net/api/sensor");
   http.addHeader("Content-Type", "application/json");
@@ -77,8 +85,5 @@ void PostSensorLevel(String sensorId, string sensorValue, string batteryLevel)
   String payload = http.getString();
 
   Serial.println(httpCode);
-  Serial.println(payload);
   http.end();
-
-  Serial.println("POST REQUEST MADE.");  
 }
