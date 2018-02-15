@@ -100,7 +100,7 @@ void loop(){
 
  while(micros() - loop_timer < 4000);                                 //Wait until the loop_timer reaches 4000us (250Hz) before starting the next loop
  loop_timer = micros();//Reset the loop timer
- delay(10000);
+ delay(1000);
  digitalWrite(13, LOW);
 }
 
