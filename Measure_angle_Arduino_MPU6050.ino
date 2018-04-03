@@ -102,7 +102,7 @@ void loop(){
   message = guid + String(angle_pitch_output) + batteryLevel;
   Serial.println(message);
   XBee.println(message);
-  Wire.write(message);
+  //Wire.write(message);
   //Serial.print("A: "); Serial.println(angle_pitch_output);
   
 
