@@ -10,7 +10,7 @@
 // XBee's DOUT (TX) is connected to pin 2 (Arduino's Software RX)
 // XBee's DIN (RX) is connected to pin 3 (Arduino's Software TX)
 
-SoftwareSerial XBee(3,4); // RX, TX
+SoftwareSerial XBee(7,8); // RX, TX
 
 
 
