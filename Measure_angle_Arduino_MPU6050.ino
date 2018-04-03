@@ -6,6 +6,14 @@
 //INT - port-2
 
 #include <Wire.h>
+#include <SoftwareSerial.h>
+// XBee's DOUT (TX) is connected to pin 2 (Arduino's Software RX)
+// XBee's DIN (RX) is connected to pin 3 (Arduino's Software TX)
+
+SoftwareSerial XBee(3,4); // RX, TX
+
+
+
 //Declaring some global variables
 int gyro_x, gyro_y, gyro_z;
 long gyro_x_cal, gyro_y_cal, gyro_z_cal;
@@ -45,6 +53,7 @@ void setup() {
   gyro_y_cal /= 1000;                                                 
   gyro_z_cal /= 1000;                                                 
   Serial.begin(115200);
+  XBee.begin(9600);
   
   loop_timer = micros();                                               //Reset the loop timer
 }
@@ -92,12 +101,14 @@ void loop(){
   digitalWrite(13, HIGH);
   message = guid + String(angle_pitch_output) + batteryLevel;
   Serial.println(message);
+  XBee.println(message);
+  Wire.write(message);
   //Serial.print("A: "); Serial.println(angle_pitch_output);
   
 
  while(micros() - loop_timer < 4000);                                 //Wait until the loop_timer reaches 4000us (250Hz) before starting the next loop
  loop_timer = micros();//Reset the loop timer
- delay(10000);
+ delay(1000);
  digitalWrite(13, LOW);
 }
 
@@ -137,8 +148,6 @@ void read_mpu_6050_data(){                                             //Subrout
   gyro_y = Wire.read()<<8|Wire.read();                                 
   gyro_z = Wire.read()<<8|Wire.read();                                 
 }
-
-
 
 
 
