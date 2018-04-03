@@ -1,6 +1,3 @@
-//
-//Version: 1.0 (AUG, 2016)
-
 //Gyro - Arduino UNO R3
 //VCC  -  5V
 //GND  -  GND
@@ -47,7 +44,7 @@ void setup() {
   gyro_x_cal /= 1000;                                                 
   gyro_y_cal /= 1000;                                                 
   gyro_z_cal /= 1000;                                                 
-  Serial.begin(9600);
+  Serial.begin(115200);
   
   loop_timer = micros();                                               //Reset the loop timer
 }
