@@ -29,12 +29,13 @@ const unsigned int MAX_DIST = 23200;
 void setup() {
 
   // The Trigger pin will tell the sensor to range find
-  pinMode(TRIG_PIN, OUTPUT);
-  pinMode(enable5V, OUTPUT);
-  pinMode(enableXBee, OUTPUT);
+  //pinMode(TRIG_PIN, OUTPUT);
+  //pinMode(enable5V, OUTPUT);
+  //pinMode(enableXBee, OUTPUT);
   //digitalWrite(TRIG_PIN, LOW);
   for(int i = 0; i <= 20; i++){
     if(i != 8){
+      pinMode(i, OUTPUT);
       digitalWrite(i, LOW);
     }
   }
@@ -67,7 +68,7 @@ void loop() {
   enterSleep(); // ATmega328 goes to sleep for about 8 seconds
   // and continues to execute code when it wakes up
 
-  if (sleepCycleCounter >= minSleepCycles) {
+  if (sleepCycleCounter > minSleepCycles) {
     digitalWrite(enable5V, HIGH);
     delay(100);
     // Hold the trigger pin high for at least 10 us
