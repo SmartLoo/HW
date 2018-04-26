@@ -21,7 +21,6 @@ const int TRIG_PIN = 7;
 const int ECHO_PIN = 8;
 const String DEVICE_GUID = "Pdac15423-20d7-4e97-80cd-0e46c98cd80e";
 String stringDistance;
-String batteryLevel;
 String message;
 
 // Anything over 400 cm (23200 us pulse) is "out of range"
@@ -43,15 +42,15 @@ void setup() {
   watchdogOn(); // Turn on the watch dog timer.
 
   // Disable the ADC by setting the ADEN bit (bit 7) to zero.
-  ADCSRA = ADCSRA & B01111111;
+  //ADCSRA = ADCSRA & B01111111;
 
   // Disable the analog comparator by setting the ACD bit
   // (bit 7) to one.
-  ACSR = B10000000;
+  //ACSR = B10000000;
 
   // Disable digital input buffers on all analog input pins
   // by setting bits 0-5 to one.
-  DIDR0 = DIDR0 | B00111111;
+  //DIDR0 = DIDR0 | B00111111;
 
   // We'll use the serial monitor to view the sensor output
   Serial.begin(9600);
@@ -70,6 +69,7 @@ void loop() {
 
   if (sleepCycleCounter >= minSleepCycles) {
     digitalWrite(enable5V, HIGH);
+    delay(100);
     // Hold the trigger pin high for at least 10 us
     digitalWrite(TRIG_PIN, HIGH);
     delayMicroseconds(10);
@@ -85,23 +85,21 @@ void loop() {
     t2 = micros();
     pulse_width = t2 - t1;
 
-    // Calculate distance in centimeters and inches. The constants
-    // are found in the datasheet, and calculated from the assumed speed 
-    //of sound in air at sea level (~340 m/s).
     cm = pulse_width / 58.0;
 
     stringDistance = String((int)cm);
-    batteryLevel = ":75";
-    message = DEVICE_GUID + stringDistance + batteryLevel;
+    message = DEVICE_GUID + stringDistance;
 
     digitalWrite(enableXBee, HIGH);
-
+    delay(500);
     if (cm < 200)
     {
-        Serial.println(message); // Prints the distance on the Serial Monitor
+        Serial.println(message);
     }
+    delay(500);
     digitalWrite(enable5V, LOW);
     digitalWrite(enableXBee, LOW);
+    sleepCycleCounter = 0;
   }
 }
 
@@ -110,9 +108,6 @@ void enterSleep()
   set_sleep_mode(SLEEP_MODE_PWR_DOWN);
   sleep_enable();
   sleep_mode();
-  // After waking from watchdog interrupt the code continues
-  // to execute from this point.
-
   sleep_disable();                   
 }
 
