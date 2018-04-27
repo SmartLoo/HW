@@ -15,8 +15,8 @@ const int minutesToSleep = 1;
 const int minSleepCycles = (minutesToSleep*60)/8;
 
 // Pins
-const int enable5V = 6;
 const int enableXBee = 4;
+const int enable5V = 6;
 const int TRIG_PIN = 7;
 const int ECHO_PIN = 8;
 const String DEVICE_GUID = "Pdac15423-20d7-4e97-80cd-0e46c98cd80e";
@@ -27,12 +27,6 @@ String message;
 const unsigned int MAX_DIST = 23200;
 
 void setup() {
-
-  // The Trigger pin will tell the sensor to range find
-  //pinMode(TRIG_PIN, OUTPUT);
-  //pinMode(enable5V, OUTPUT);
-  //pinMode(enableXBee, OUTPUT);
-  //digitalWrite(TRIG_PIN, LOW);
   for(int i = 0; i <= 20; i++){
     if(i != 8){
       pinMode(i, OUTPUT);
@@ -52,8 +46,7 @@ void setup() {
   // Disable digital input buffers on all analog input pins
   // by setting bits 0-5 to one.
   //DIDR0 = DIDR0 | B00111111;
-
-  // We'll use the serial monitor to view the sensor output
+  
   Serial.begin(9600);
 }
 
@@ -89,7 +82,7 @@ void loop() {
     cm = pulse_width / 58.0;
 
     stringDistance = String((int)cm);
-    message = DEVICE_GUID + stringDistance;
+    message = DEVICE_GUID + ":" + stringDistance;
 
     digitalWrite(enableXBee, HIGH);
     delay(500);
