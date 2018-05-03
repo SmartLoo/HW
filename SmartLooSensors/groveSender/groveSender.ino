@@ -25,7 +25,6 @@ void setup()
   for(int i = 0; i <= 20; i++){
     if(i != 8){
       pinMode(i, OUTPUT);
-      digitalWrite(i, LOW);
     }
   }
   pinMode(WATER_SENSOR_SIGNAL_LINE, INPUT);

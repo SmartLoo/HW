@@ -28,7 +28,7 @@ const unsigned int MAX_DIST = 23200;
 void setup() {
   for(int i = 0; i <= 20; i++){
     if(i != 8){
-      digitalWrite(i, LOW);
+      pinMode(i, OUTPUT);
     }
   }
   
@@ -70,7 +70,7 @@ void loop() {
     else if(measuredDistance > initialMeasuredDistance){
       depressed++;
     }
-    
+    delay(500);
   } while((currentTime - initialTime) < 60000);
     
   message = DEVICE_GUID + ":" + String((int)depressed);
