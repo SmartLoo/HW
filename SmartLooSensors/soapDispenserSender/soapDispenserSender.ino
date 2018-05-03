@@ -19,7 +19,7 @@ int depressed = 0;
 float initialMeasuredDistance = 0;
 unsigned long initialTime;
 unsigned long currentTime;
-const String DEVICE_GUID = "Pdac15423-20d7-4e97-80cd-0e46c98cd80e";
+const String DEVICE_GUID = "SI4624NJ";
 String message;
 
 // Anything over 400 cm (23200 us pulse) is "out of range"
@@ -73,7 +73,7 @@ void loop() {
     delay(500);
   } while((currentTime - initialTime) < 60000);
     
-  message = DEVICE_GUID + ":" + String((int)depressed);
+  message = DEVICE_GUID + ":" + String((int)depressed) + "?";
 
   digitalWrite(enableXBee, HIGH);
   delay(500);

@@ -17,7 +17,7 @@ const int enableXBee = 4;
 const int enable5V = 6;
 const int WATER_SENSOR_SIGNAL_LINE = 8;
 
-const String DEVICE_GUID = "W52858b18-0bb7-45b0-836c-d4d5f335558e";
+const String DEVICE_GUID = "LRV2PVDX";
 String message;
 
 void setup()
@@ -40,10 +40,10 @@ void loop()
     digitalWrite(enable5V, HIGH);
     delay(100);
     if(digitalRead(WATER_SENSOR_SIGNAL_LINE) == LOW){
-      message = DEVICE_GUID + ":1";
+      message = DEVICE_GUID + ":1?";
     }
     else{
-      message = DEVICE_GUID + ":0";
+      message = DEVICE_GUID + ":0?";
     }
     digitalWrite(enableXBee, HIGH);
     delay(500);
