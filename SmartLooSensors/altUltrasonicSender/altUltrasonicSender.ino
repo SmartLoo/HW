@@ -19,7 +19,7 @@ const int enable5V = 6;
 const int TRIG_PIN = 7;
 const int ECHO_PIN = 8;
 
-const String DEVICE_GUID = "Pdac15423-20d7-4e97-80cd-0e46c98cd80e";
+const String DEVICE_GUID = "PI4614NJ";
 String stringDistance;
 String message;
 
@@ -71,7 +71,7 @@ void loop() {
   cm = pulse_width / 58.0;
 
   stringDistance = String((int)cm);
-  message = DEVICE_GUID + ":" + stringDistance;
+  message = DEVICE_GUID + ":" + stringDistance + "?";
 
   digitalWrite(enableXBee, HIGH);
   delay(500);
