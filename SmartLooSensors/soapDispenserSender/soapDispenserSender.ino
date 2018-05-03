@@ -70,8 +70,8 @@ void loop() {
     else if(measuredDistance > initialMeasuredDistance){
       depressed++;
     }
-    delay(500);
-  } while((currentTime - initialTime) < 60000);
+    delay(1000);
+  } while((currentTime - initialTime) < 30000);
     
   message = DEVICE_GUID + ":" + String((int)depressed) + "?";
 
