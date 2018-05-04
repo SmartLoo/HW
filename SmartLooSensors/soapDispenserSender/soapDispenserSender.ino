@@ -15,8 +15,8 @@ const int enable5V = 6;
 const int TRIG_PIN = 7;
 const int ECHO_PIN = 8;
 
-int depressed = 0;
-float initialMeasuredDistance = 0;
+bool depressed = false;
+int depressedCounter = 0;
 unsigned long initialTime;
 unsigned long currentTime;
 const String DEVICE_GUID = "SI4624NJ";
@@ -64,16 +64,16 @@ void loop() {
   
     measuredDistance = pulse_width / 58.0;
 
-    if(initialMeasuredDistance == 0){
-      initialMeasuredDistance = measuredDistance;
+    if(measuredDistance < 8.25 && depressed == false){
+      depressed = true;
     }
-    else if(measuredDistance > initialMeasuredDistance){
-      depressed++;
+    else if(measuredDistance > 8.25 && depressed == true){
+      depressedCounter++;
     }
-    delay(1000);
+    delay(500);
   } while((currentTime - initialTime) < 30000);
     
-  message = DEVICE_GUID + ":" + String((int)depressed) + "?";
+  message = DEVICE_GUID + ":" + String((int)depressedCounter) + "?";
 
   digitalWrite(enableXBee, HIGH);
   delay(500);
@@ -81,6 +81,7 @@ void loop() {
   delay(500);
   digitalWrite(enable5V, LOW);
   digitalWrite(enableXBee, LOW);
+  depressedCounter = 0;
 }
 
 
