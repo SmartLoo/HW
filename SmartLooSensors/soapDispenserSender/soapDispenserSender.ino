@@ -71,8 +71,8 @@ void loop() {
       depressedCounter++;
       depressed = false;
     }
-    delay(500);
-  } while((currentTime - initialTime) < 30000);
+    delay(100);
+  } while((currentTime - initialTime) < 60000);
     
   message = DEVICE_GUID + ":" + String((int)depressedCounter) + "?";
 
