@@ -1,10 +1,3 @@
-/*
- *  This sketch sends data via HTTP GET requests to data.sparkfun.com service.
- *
- *  You need to get streamId and privateKey at data.sparkfun.com and paste them
- *  below. Or just customize this script to talk to other HTTP servers.
- *
- */
 
 #include <WiFi.h>
 #include <HTTPClient.h>
@@ -19,6 +12,7 @@ int IncomingByte = 0;
 int target = 0;
 int data = 0;
 int code = 0;
+String bridgeId = "BR234567";
 
 HardwareSerial XBee(2);
 
@@ -45,35 +39,45 @@ void setup()
   Serial.println("WiFi connected");  
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
+
 }
 
 
 void loop()
 {
-  if (XBee.available() >= 38) //changed from 38 to 0
+  if (XBee.available() >= 11) //changed from 38 to 0
   {
-      String data = XBee.readString();
-      
-      Serial.println("XBee Raw Data: " + data);
+      String data = XBee.readStringUntil('?');
+      Serial.println(data);
+
       int delimId = data.indexOf(':');
       int delimValue = data.indexOf(':', delimId + 1);
       
       String sensorId = data.substring(0, delimId);
+      sensorId.trim();
+      bridgeId.trim();
       String sensorValue = data.substring(delimId + 1, delimValue);
-      String batteryLevel = data.substring(delimValue + 1);
-
+      Serial.println("----------");
       Serial.println(sensorId);
+      Serial.println(bridgeId);
       Serial.println(sensorValue);
-      Serial.println(batteryLevel);
+      //Serial.println(sensorId.length());
+      //Serial.println(bridgeId.length());
+      Serial.println("----------");
 
-      if (sensorId.length() == 37){
-          PostSensorLevel(sensorId, sensorValue, batteryLevel);
+      if (sensorValue.toInt() >= 0 && sensorValue.toInt() <= 200){
+          Serial.println("POST START");
+          PostSensorLevel(sensorId, bridgeId, sensorValue);
+      }
+      else
+      {
+        Serial.println("POST FAIL");
       }
   }
   delay(1000);
 }
 
-void PostSensorLevel(String sensorId, String sensorValue, String batteryLevel)
+void PostSensorLevel(String sensorId, String bridgeId, String sensorValue)
 {
   WiFiClient client;
   const int httpPort = 80;
@@ -84,8 +88,8 @@ void PostSensorLevel(String sensorId, String sensorValue, String batteryLevel)
   }
   
   String url = "/api/sensor";
-  String req = "{\"sensorId\": \"" + sensorId + "\",\"sensorValue\": " + sensorValue + ",\"batteryLevel\": " + batteryLevel + "}";
- 
+  String req = "{\"sensorId\": \"" + sensorId + "\",\"bridgeId\": " + "\"" + bridgeId + "\"" + ",\"sensorValue\": " + sensorValue + "}";
+  Serial.println(req);
   HTTPClient http;
   http.begin("http://smartloo.azurewebsites.net/api/sensor");
   http.addHeader("Content-Type", "application/json");
