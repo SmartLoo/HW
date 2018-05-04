@@ -69,6 +69,7 @@ void loop() {
     }
     else if(measuredDistance > 8.25 && depressed == true){
       depressedCounter++;
+      depressed = false;
     }
     delay(500);
   } while((currentTime - initialTime) < 30000);
